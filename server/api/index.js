@@ -3,11 +3,15 @@ const axios = require('axios');
 
 module.exports = router;
 
-router.get('/location', async (req, res, next) => {
+router.get('/location/:city', async (req, res, next) => {
   try {
+    console.log('hitting location API');
+    console.log(req.params.city);
     const { data } = await axios.get(
-      'http://dataservice.accuweather.com/locations/v1/cities/search?apikey=%20%09nfahuby7dlIchUVaRIqotVQbYg3nnzRx%20&q=Chicago&language=en-us&details=false'
+      `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=%20%09nfahuby7dlIchUVaRIqotVQbYg3nnzRx%20&q=${req.params.city}&language=en-us&details=false`
     );
+    console.log('location data sent');
+    console.log(data[0].key);
     res.send(data[0].Key);
   } catch (error) {
     next(error);
@@ -19,6 +23,9 @@ router.get('/weather/:locationKey', async (req, res, next) => {
     const { data } = await axios.get(
       `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${req.params.locationKey}?apikey=%20%09nfahuby7dlIchUVaRIqotVQbYg3nnzRx%20&language=en-us`
     );
+
+    console.log('weather data back end');
+    console.log(data);
     res.send(data);
   } catch (error) {
     next(error);
