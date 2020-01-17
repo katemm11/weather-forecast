@@ -37,18 +37,22 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={{ fontFamily: 'helvetica', textAlign: 'center' }}>
         <div>3-Day Weather Forecast</div>
         <p>Current City: {this.state.city}</p>
         <form onSubmit={this.handleSubmit}>
-          <label>
-            City
-            <input type="text" name="city" onChange={this.handleChange} />
-          </label>
+          <input type="text" name="city" onChange={this.handleChange} />
           <input type="submit" value="Submit City Location" />
         </form>
         <br />
         <button onClick={this.handleClick}>Get My 3-day Forecast</button>
+        <br />
+        <br />
+        <div>Day 1:</div>
+        <br />
+        <div>Day 2:</div>
+        <br />
+        <div>Day 3:</div>
       </div>
     );
   }
