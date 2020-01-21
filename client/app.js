@@ -28,7 +28,6 @@ class App extends React.Component {
   async handleSubmit(event) {
     event.preventDefault();
     const { data } = await axios.get(`/api/location/${this.state.city}`);
-    this.setState({ cachedData: '' });
 
     if (typeof data === 'object') {
       this.setState({
