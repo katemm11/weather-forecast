@@ -42,7 +42,7 @@ router.get('/weather/:locationKey/:city', async (req, res, next) => {
 
 router.use((req, res, next) => {
   const error = new Error('Not Found');
-  console.log('there was an error');
+  console.error(error);
   error.status = 404;
   next(error);
 });
