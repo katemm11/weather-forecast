@@ -19,8 +19,6 @@ class App extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  componentDidMount() {}
-
   handleChange(event) {
     event.preventDefault();
     this.setState({ city: event.target.value });
@@ -30,6 +28,7 @@ class App extends React.Component {
   async handleSubmit(event) {
     event.preventDefault();
     const { data } = await axios.get(`/api/location/${this.state.city}`);
+    this.setState({ cachedData: '' });
 
     if (typeof data === 'object') {
       this.setState({
@@ -40,25 +39,20 @@ class App extends React.Component {
     } else {
       this.setState({
         locationKey: data,
-        cachedData: 'No data found in cache. Grab data from Accuweather API?',
+        cachedData: false,
       });
     }
-    console.log(this.state);
   }
 
   //call API button
   async handleClick(event) {
     event.preventDefault();
-    console.log('API button was clicked');
-    console.log('locationKey is', this.state.locationKey);
-    console.log('city is', this.state.city);
+
     this.setState({ loadingData: true });
 
     const { data } = await axios.get(
       `/api/weather/${this.state.locationKey}/${this.state.city}`
     );
-
-    console.log('API data retrieved from back end ', data);
 
     this.setState({
       day1: data.day1,
@@ -78,9 +72,9 @@ class App extends React.Component {
           <input type="submit" value="Submit City" />
         </form>
         <br />
-        {this.state.cachedData.length > 0 ? (
+        {this.state.cachedData === false ? (
           <div>
-            <p>{this.state.cachedData}</p>
+            <p>No data found in cache. Grab data from Accuweather API?</p>
             <button onClick={this.handleClick}>Call API</button>
           </div>
         ) : (

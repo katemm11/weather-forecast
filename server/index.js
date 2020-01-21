@@ -45,8 +45,8 @@ const syncDb = () => {
 
 const bootApp = async () => {
   try {
-    await syncDb();
     await createApp();
+    await syncDb();
     await startListening();
   } catch (error) {
     console.error(error);

@@ -7,7 +7,6 @@ module.exports = router;
 
 router.get('/location/:city', async (req, res, next) => {
   try {
-    console.log('hitting location API');
     const data = await Weather.findAll({ where: { city: req.params.city } });
 
     if (!data.length > 0) {
@@ -26,12 +25,9 @@ router.get('/location/:city', async (req, res, next) => {
 
 router.get('/weather/:locationKey/:city', async (req, res, next) => {
   try {
-    console.log('hitting weather API');
-    console.log('city is', req.params.city);
     const { data } = await axios.get(
       `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${req.params.locationKey}?apikey=%20%09${process.env.API_KEY}%20&language=en-us`
     );
-    console.log('back end weather data', data);
     const updated = await Weather.create({
       city: req.params.city,
       day1: data.DailyForecasts[0].Day.IconPhrase,
