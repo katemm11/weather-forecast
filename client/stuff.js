@@ -1,15 +1,19 @@
 import React from 'react';
 import axios from 'axios';
+import {useEffect, useState} from React;
 
 class App extends React.Component {
   constructor() {
     super();
-    this.state = { city: '', locationKey: '', weather: '' };
+    this.state = { city: '', locationKey: '', weather: [] };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
+
+
+
 
   componentDidMount() {}
 
@@ -17,8 +21,8 @@ class App extends React.Component {
     event.preventDefault();
     const { data } = await axios.get(`/api/weather/${this.state.locationKey}`);
 
-    this.setState({ weather: data.DailyForecasts });
-    console.log('state weather ', this.state.weather);
+    this.setState({ weather: data });
+    console.log(this.state.weather);
     console.log('weather data 1 is', data.DailyForecasts[0].Day.IconPhrase);
   }
 
@@ -39,6 +43,7 @@ class App extends React.Component {
   }
 
   render() {
+    const weather = this.state.weather;
     return (
       <div style={{ fontFamily: 'helvetica', textAlign: 'center' }}>
         <div>3-Day Weather Forecast</div>
@@ -51,14 +56,9 @@ class App extends React.Component {
         <button onClick={this.handleClick}>Get My 3-day Forecast</button>
         <br />
         <br />
-        <p>
-          Today:{' '}
-          {this.state.weather.length > 0
-            ? this.state.weather[0].Day.IconPhrase
-            : ''}
-        </p>
+        <div>Today: </div>
         <br />
-        <p>Tomorrow:</p>
+        <div>Tomorrow:</div>
         <br />
         <div>Next Day:</div>
       </div>

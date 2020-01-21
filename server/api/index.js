@@ -8,9 +8,6 @@ router.get('/location/:city', async (req, res, next) => {
   try {
     console.log('hitting location API');
     console.log(req.params.city);
-    // const { data } = await axios.get(
-    //   `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=%20%09nfahuby7dlIchUVaRIqotVQbYg3nnzRx%20&q=${req.params.city}&language=en-us&details=false`
-    // );
 
     const { data } = await axios.get(
       `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=%20%09${process.env.API_KEY}%20&q=${req.params.city}&language=en-us&details=false`
@@ -26,10 +23,6 @@ router.get('/location/:city', async (req, res, next) => {
 
 router.get('/weather/:locationKey', async (req, res, next) => {
   try {
-    // const { data } = await axios.get(
-    //   `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${req.params.locationKey}?apikey=%20%09nfahuby7dlIchUVaRIqotVQbYg3nnzRx%20&language=en-us`
-    // );
-
     const { data } = await axios.get(
       `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${req.params.locationKey}?apikey=%20%09${process.env.API_KEY}%20&language=en-us`
     );
