@@ -4,7 +4,15 @@ import axios from 'axios';
 class App extends React.Component {
   constructor() {
     super();
-    this.state = { city: '', locationKey: '', weather: '' };
+    this.state = {
+      city: '',
+      locationKey: '',
+      cachedData: '',
+      loadingData: false,
+      day1: '',
+      day2: '',
+      day3: '',
+    };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -13,29 +21,51 @@ class App extends React.Component {
 
   componentDidMount() {}
 
-  async handleClick(event) {
-    event.preventDefault();
-    const { data } = await axios.get(`/api/weather/${this.state.locationKey}`);
-
-    this.setState({ weather: data.DailyForecasts });
-    console.log('state weather ', this.state.weather);
-    console.log('weather data 1 is', data.DailyForecasts[0].Day.IconPhrase);
-  }
-
   handleChange(event) {
     event.preventDefault();
     this.setState({ city: event.target.value });
+  }
+
+  //city Button
+  async handleSubmit(event) {
+    event.preventDefault();
+    const { data } = await axios.get(`/api/location/${this.state.city}`);
+
+    if (typeof data === 'object') {
+      this.setState({
+        day1: data[0].day1,
+        day2: data[0].day2,
+        day3: data[0].day3,
+      });
+    } else {
+      this.setState({
+        locationKey: data,
+        cachedData: 'No data found in cache. Grab data from Accuweather API?',
+      });
+    }
     console.log(this.state);
   }
 
-  async handleSubmit(event) {
+  //call API button
+  async handleClick(event) {
     event.preventDefault();
-    console.log('submitted!');
-    console.log(this.state.city);
+    console.log('API button was clicked');
+    console.log('locationKey is', this.state.locationKey);
+    console.log('city is', this.state.city);
+    this.setState({ loadingData: true });
 
-    const { data } = await axios.get(`/api/location/${this.state.city}`);
-    console.log('axios data is ', data);
-    this.setState({ locationKey: data });
+    const { data } = await axios.get(
+      `/api/weather/${this.state.locationKey}/${this.state.city}`
+    );
+
+    console.log('API data retrieved from back end ', data);
+
+    this.setState({
+      day1: data.day1,
+      day2: data.day2,
+      day3: data.day3,
+      loadingData: false,
+    });
   }
 
   render() {
@@ -45,22 +75,26 @@ class App extends React.Component {
         <p>Current City: {this.state.city}</p>
         <form onSubmit={this.handleSubmit}>
           <input type="text" name="city" onChange={this.handleChange} />
-          <input type="submit" value="Submit City Location" />
+          <input type="submit" value="Submit City" />
         </form>
         <br />
-        <button onClick={this.handleClick}>Get My 3-day Forecast</button>
+        {this.state.cachedData.length > 0 ? (
+          <div>
+            <p>{this.state.cachedData}</p>
+            <button onClick={this.handleClick}>Call API</button>
+          </div>
+        ) : (
+          ''
+        )}
+
+        <p>{this.state.loadingData === true ? 'loading data' : ''}</p>
         <br />
         <br />
-        <p>
-          Today:{' '}
-          {this.state.weather.length > 0
-            ? this.state.weather[0].Day.IconPhrase
-            : ''}
-        </p>
+        <p>Today: {this.state.day1.length > 0 ? this.state.day1 : ''}</p>
         <br />
-        <p>Tomorrow:</p>
+        <p>Tomorrow: {this.state.day2.length > 0 ? this.state.day2 : ''}</p>
         <br />
-        <div>Next Day:</div>
+        <p>Next Day: {this.state.day3.length > 0 ? this.state.day3 : ''}</p>
       </div>
     );
   }

@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
+const { db } = require('./db');
 
 const app = express();
 
@@ -37,9 +38,19 @@ const startListening = () => {
   });
 };
 
+const syncDb = () => {
+  db.sync();
+  console.log('db synced');
+};
+
 const bootApp = async () => {
-  await createApp();
-  await startListening();
+  try {
+    await syncDb();
+    await createApp();
+    await startListening();
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 bootApp();
