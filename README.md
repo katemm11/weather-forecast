@@ -4,7 +4,7 @@
 
 Here are the steps to get the weather forecast web application running on your computer.
 
-1. Open up the terminal on your computer.
+1. Open the terminal on your computer.
 2. Clone this repo by typing `git clone https://github.com/katemm11/weather-forecast.git` on the command line.
 3. Open up the file with a code editor of your choice.
 4. Go to `https://developer.accuweather.com/apis` to create an AccuWeather developer account. You will need to create a new app at `https://developer.accuweather.com/user/me/apps`. Once you have created a new app, you will be able to see your API key.
