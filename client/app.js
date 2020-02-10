@@ -73,7 +73,7 @@ class App extends React.Component {
         <br />
         {this.state.cachedData === false ? (
           <div>
-            <p>No data found in cache. Grab data from Accuweather API?</p>
+            <p>No data found in cache. Grab data from AccuWeather API?</p>
             <button onClick={this.handleClick}>Call API</button>
           </div>
         ) : (
